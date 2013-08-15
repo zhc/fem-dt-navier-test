@@ -43,13 +43,33 @@ class DomainTop : public SubDomain
 };
 
 
-int main()
+int main(int argc, char *argv[])
 {
+    for(int i=0; i<argc; i++){
+        info("param %d = %s", i, argv[i]);
+    }
+    if (argc < 6){
+        if (MPI::process_number() == 0) {
+            info("Usage: fem-dt-navier-test N DT T CONV RE");
+        }
+        exit(-1);
+    }
     int N = 30;
     double DT = 0.5;
     double T = 10;
     std::string CONV = "d1";
     double REYNOLDS = 100;
+
+    N = atoi(argv[1]);
+    DT = atof(argv[2]);
+    T = atof(argv[3]);
+    CONV = argv[4];
+    REYNOLDS = atof(argv[5]);
+
+    if (MPI::process_number() == 0) {
+        info("Using: %d %f %f %s %f", N, DT, T, CONV.c_str(), REYNOLDS);
+    }
+
     UnitSquareMesh mesh(N, N);
     navier_velocity::FunctionSpace U(mesh);
     navier_pressure::FunctionSpace P(mesh);

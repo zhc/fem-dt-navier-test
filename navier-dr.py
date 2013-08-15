@@ -122,6 +122,7 @@ while t <= T:
 	psi_max = MPI.max(psi_max)
 	psi_min = MPI.max(psi_min)
 	if (MPI.process_number() == 0):
+		print "%f %f %f" % (t, psi_max, psi_min)
 		outpsi.write("%f %f %f\n" % (t, psi_max, psi_min))
 		outpsi.flush()
 	fvelo << u1
