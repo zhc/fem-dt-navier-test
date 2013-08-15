@@ -1,0 +1,3 @@
+#include navier.ufl
+a = -inner(grad(p), grad(q))*dx
+L = 1.0/tau*div(u12)*q*dx - inner(grad(p0), grad(q))*dx

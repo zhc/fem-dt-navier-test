@@ -1,0 +1,6 @@
+#include navier.ufl
+PSI = FiniteElement("Lagrange", shape, 2)
+psi = TrialFunction(PSI)
+psi_v = TestFunction(PSI)
+a = inner(grad(psi), grad(psi_v))*dx
+L = inner(-rot(u1), psi_v)*dx

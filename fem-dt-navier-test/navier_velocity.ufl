@@ -1,0 +1,3 @@
+#include navier.ufl
+a = 1/tau*inner(u, v)*dx
+L = 1/tau*inner(u12, v)*dx - inner(grad(p1-p0), v)*dx

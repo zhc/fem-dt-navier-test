@@ -1,0 +1,15 @@
+shape = triangle
+U = VectorElement("Lagrange", shape, 2)
+P = FiniteElement("Lagrange", shape, 1)
+u = TrialFunction(U)
+p = TrialFunction(P)
+v = TestFunction(U)
+q = TestFunction(P)
+
+u1 = Coefficient(U)
+u0 = Coefficient(U)
+u12 = Coefficient(U)
+p0 = Coefficient(P)
+p1 = Coefficient(P)
+tau = Constant(shape)
+Re = Constant(shape)
