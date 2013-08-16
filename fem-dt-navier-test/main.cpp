@@ -1,5 +1,5 @@
 #include <dolfin.h>
-#include <boost/make_shared.hpp>
+#include <stdio.h>
 #include "navier_velocity.h"
 #include "navier_pressure.h"
 #include "navier_psi.h"
@@ -167,6 +167,12 @@ int main(int argc, char *argv[])
     File fpress(s);
     sprintf(s, "result_%s_%d_%f_%f/psi.pvd", CONV.c_str(), N, DT, REYNOLDS);
     File fpsi(s);
+    sprintf(s, "result_%s_%d_%f_%f/psi.txt", CONV.c_str(), N, DT, REYNOLDS);
+    FILE* out_psi;
+    if (MPI::process_number() == 0){
+        out_psi = fopen(s, "w");
+        fprintf(out_psi,"t psi_max, psi_min\n");
+    }
     double t = 0;
     while(t <= T) {
         if (MPI::process_number() == 0){
@@ -183,6 +189,7 @@ int main(int argc, char *argv[])
         psi_min = MPI::min(psi_min);
         if (MPI::process_number() == 0){
             info("%lf %lf %lf", t, psi_max, psi_min);
+            fprintf(out_psi,"%lf %lf %lf\n", t, psi_max, psi_min);
         }
         fvelo << u1;
         fpress << p1;
@@ -190,6 +197,10 @@ int main(int argc, char *argv[])
         u0 = u1;
         p0 = p1;
         t += DT;
+    }
+
+    if (MPI::process_number() == 0){
+        fclose(out_psi);
     }
     return 0;
 }
